@@ -27,9 +27,9 @@ background: #212529b8;
 </style>
 {% endblock %}
 {% block body %}
-
-<div class="container profile">
+<div class="container profile border border-dark bg-dark text-light">
         <div class="row">
+            <h1 Class="text-center mt-4"> {{request.user |capfirst }} Profile</h1>
             <div class="col-md-4">
                 <div class="profile-img">
                     <img src="{{user.student.image.url}}" alt="" width="310px" height="270px">

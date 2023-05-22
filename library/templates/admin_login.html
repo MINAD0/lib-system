@@ -4,27 +4,38 @@
 {% block css %}
 {% endblock %}
 {% block body %}
-<div class="container">
-<br>
-<h1 class="text-center"><u>Admin Login</u></h1><br>
-<p><b>Note:</b> Only the admin can login from here. No student will be allowed to login.</p>
-    <form method="POST"> {% csrf_token %}
-
-    <div class="row mt-4">
-        <div class="form-group col-md-12">
-            <label><i style="font-weight: bold;">Username</i></label>
-            <input type="text" class="form-control mt-2" name="username" placeholder="Enter Username" required>
+<div class="container mt-4">
+    <h1 class="text-center">Admin Login</h1>
+    <p class="text-center"><b>Note:</b> Only the admin can log in from here. No student will be allowed to login.</p>
+  
+    <form method="POST" class="mt-4">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="form-group">
+            <label for="username" class="font-weight-bold">Username</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Enter Username" required>
+          </div>
         </div>
-    </div>
-
-    <div class="row mt-4">
-        <div class="form-group col-md-12">
-            <label><i style="font-weight: bold;">Password</i></label>
-            <input type="password" class="form-control mt-2" name="password" placeholder="Enter Password" required>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="form-group">
+            <label for="password" class="font-weight-bold">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Enter Password" required>
+          </div>
         </div>
-    </div>
-    <button type="submit" class="btn btn-outline-primary mt-4">Login</button>
-</div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <button type="submit" class="btn btn-primary btn-block mt-4">Login</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  
 {% endblock %}
 {% block js %}
 <script>

@@ -4,37 +4,34 @@
 {% block css %}
 {% endblock %}
 {% block body %}
-    <div class="container mt-5 text-center">
-      <div class="container-fluid py-3">
-        <h1 class="display-5 fw-bold">Library Management System</h1>
-      </div>
-      
-      <div class="container text-center">
-        <div class="row justify-content-md-center row-cols-3">
-          <div class="col mb-4">
-            <div class="card" style="width: 18rem;">
-              <img src="{% static 'admin.png' %}" class="img-radius" alt="user-image">
-              <div class="card-body">
-                <h5 class="card-title">Admin Login</h5>
-                <br>
-                <a class="btn btn-outline-primary btn-lg" href="/student_login/">Login</a>
-              </div>
-            </div>
-          </div>
+<div class="container mt-5">
+  <div class="container py-3">
+    <h1 class="display-5 text-center fw-bold">Library Management System</h1>
+  </div>
 
-          <div class="col mb-4">
-            <div class="card" style="width: 18rem;">
-              <img src="{% static 'students.png' %}" class="img-radius" alt="user-Image">
-              <div class="card-body">
-                <h5 class="card-title">Student Login</h5>
-                <a class="btn btn-outline-primary btn-lg" href="/student_login/">Login</a>
-              </div>
-            </div>
-          </div>
-
+  <div class="row justify-content-center">
+    <div class="col-md-4 col-sm-6 mb-4">
+      <div class="card text-center">
+        <img src="{% static 'admin.png' %}" class="card-img-top img-radius" alt="user-image">
+        <div class="card-body">
+          <h5 class="card-title">Admin Login</h5>
+          <a class="btn btn-outline-primary btn-lg" href="/admin_login/">Login</a>
         </div>
       </div>
     </div>
+
+    <div class="col-md-4 col-sm-6 mb-4">
+      <div class="card text-center">
+        <img src="{% static 'students.png' %}" class="card-img-top img-radius" alt="user-Image">
+        <div class="card-body">
+          <h5 class="card-title">Student Login</h5>
+          <a class="btn btn-outline-primary btn-lg" href="/student_login/">Login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
 

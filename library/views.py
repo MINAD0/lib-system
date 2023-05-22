@@ -24,6 +24,12 @@ def add_book(request):
         return render(request, "add_book.html", {'alert':alert})
     return render(request, "add_book.html")
 
+@login_required(login_url='/student_login')
+def books_list(request):
+    books_l = Book.objects.all()
+    return render(request, "books_list.html", {'books':books_l})
+
+
 @login_required(login_url = '/admin_login')
 def view_books(request):
     books = Book.objects.all()
