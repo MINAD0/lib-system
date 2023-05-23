@@ -1,5 +1,5 @@
 from library.forms import IssueBookForm
-from django.shortcuts import redirect, render,HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render,HttpResponse
 from .models import *
 from .forms import IssueBookForm
 from django.contrib.auth import authenticate, login, logout
@@ -27,7 +27,8 @@ def add_book(request):
 @login_required(login_url='/student_login')
 def books_list(request):
     books_l = Book.objects.all()
-    return render(request, "books_list.html", {'books':books_l})
+    issued_books = IssuedBook.objects.all()
+    return render(request, "books_list.html", {'books':books_l, 'issued_books':issued_books})
 
 
 @login_required(login_url = '/admin_login')
@@ -58,21 +59,17 @@ def issue_book(request):
 def view_issued_book(request):
     issuedBooks = IssuedBook.objects.all()
     details = []
-    for i in issuedBooks:
-        days = (date.today()-i.issued_date)
-        d=days.days
-        fine=0
-        if d>14:
-            day=d-14
-            fine=day*5
-        books = list(models.Book.objects.filter(isbn=i.isbn))
-        students = list(models.Student.objects.filter(user=i.student_id))
-        i=0
-        for l in books:
-            t=(students[i].user,students[i].user_id,books[i].name,books[i].isbn,issuedBooks[0].issued_date,issuedBooks[0].expiry_date,fine)
-            i=i+1
+    for issuedBook in issuedBooks:
+        days = (date.today() - issuedBook.issued_date).days
+        fine = 0
+        if days > 14:
+            fine = (days - 14) * 5
+        books = list(models.Book.objects.filter(isbn=issuedBook.isbn))
+        students = list(models.Student.objects.filter(user=issuedBook.student_id))
+        for book, student in zip(books, students):
+            t = (student.user, student.user_id, book.name, book.isbn, issuedBook.issued_date, issuedBook.expiry_date, fine)
             details.append(t)
-    return render(request, "view_issued_book.html", {'issuedBooks':issuedBooks, 'details':details})
+    return render(request, "view_issued_book.html", {'issuedBooks': issuedBooks, 'details': details})
 
 @login_required(login_url = '/student_login')
 def student_issued_books(request):
@@ -213,3 +210,27 @@ def admin_login(request):
 def Logout(request):
     logout(request)
     return redirect ("/")
+
+def delete_issue(request, book_id):
+    issuedBooks = IssuedBook.objects.filter(id=book_id)
+    issuedBooks.delete()
+    return redirect("/view_issued_book")
+
+
+def reserve_book(request, book_id):
+    # Retrieve the book using the book_id
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return redirect('books_list')  # Redirect to books list if book doesn't exist
+
+    # Check if the book is already reserved
+    if BookRequest.objects.filter(isbn=book.isbn).exists():
+        return redirect('books_list')  # Redirect to books list if book is already reserved
+
+    # Create a new BookRequest instance for the reservation
+    request_obj = BookRequest(student_id=request.user.id, isbn=book.isbn)
+    request_obj.save()
+
+    # Redirect to a success page or any other desired action
+    return render(request, "books_list.html")

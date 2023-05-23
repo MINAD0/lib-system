@@ -8,6 +8,7 @@ class Book(models.Model):
     author = models.CharField(max_length=200)
     isbn = models.PositiveIntegerField()
     category = models.CharField(max_length=50)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name) + " ["+str(self.isbn)+']'
@@ -31,3 +32,15 @@ class IssuedBook(models.Model):
     isbn = models.CharField(max_length=13)
     issued_date = models.DateField(auto_now=True)
     expiry_date = models.DateField(default=expiry)
+
+    def __str__(self):
+        return str(self.isbn)
+    
+class BookRequest(models.Model):
+    student_id = models.CharField(max_length=100, blank=True) 
+    isbn = models.CharField(max_length=13)
+    issued_date = models.DateField(auto_now=True)
+    expiry_date = models.DateField(default=expiry)
+
+    def __str__(self):
+        return str(self.isbn)
