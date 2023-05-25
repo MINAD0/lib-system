@@ -216,7 +216,7 @@ def delete_issue(request, book_id):
     issuedBooks.delete()
     return redirect("/view_issued_book")
 
-
+@login_required(login_url = '/student_login')
 def reserve_book(request, book_id):
     # Retrieve the book using the book_id
     try:
@@ -231,6 +231,28 @@ def reserve_book(request, book_id):
     # Create a new BookRequest instance for the reservation
     request_obj = BookRequest(student_id=request.user.id, isbn=book.isbn)
     request_obj.save()
-
+    alert = True
+    return render(request, "books_list.html", {'alert':alert})
     # Redirect to a success page or any other desired action
-    return render(request, "books_list.html")
+    # return render(request, "books_list.html")
+
+def show_reservation(request):
+    reservations = BookRequest.objects.all()
+    details = []
+    for reservation in reservations:
+        days = (date.today() - reservation.issued_date).days
+        fine = 0
+        if days > 14:
+            fine = (days - 14) * 5
+        books = list(models.Book.objects.filter(isbn=reservation.isbn))
+        students = list(models.Student.objects.filter(user=reservation.student_id))
+        for book, student in zip(books, students):
+            t = (student.user, student.user_id, book.name, book.isbn, reservation.issued_date, reservation.expiry_date, fine)
+            details.append(t)
+    return render(request, "reservations.html", {'reservations':reservations, 'details':details})
+
+@login_required(login_url = '/admin_login')
+def delete_reservation(request, myid):
+    reservations = BookRequest.objects.filter(id=myid)
+    reservations.delete()
+    return redirect("/reservations")

@@ -8,6 +8,7 @@ urlpatterns = [
     path("view_students/", views.view_students, name="view_students"),
     path("issue_book/", views.issue_book, name="issue_book"),
     path("view_issued_book/", views.view_issued_book, name="view_issued_book"),
+    path("reservations/", views.show_reservation, name="reservations"),
     path("student_issued_books/", views.student_issued_books, name="student_issued_books"),
     path("profile/", views.profile, name="profile"),
     path("edit_profile/", views.edit_profile, name="edit_profile"),
@@ -23,4 +24,7 @@ urlpatterns = [
 
     path("delete_book/<int:myid>/", views.delete_book, name="delete_book"),
     path("delete_student/<int:myid>/", views.delete_student, name="delete_student"),
+    path("reserve_book/<int:book_id>/", views.reserve_book, name="reserve_book"),
+    # path('accept_reservation/<int:book_id>/', views.accept_reservation, name='accept_reservation'),
+    path('delete_reservation/<int:myid>/', views.delete_reservation, name='delete_reservation'),
 ]

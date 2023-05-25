@@ -28,15 +28,20 @@
                 <td>{{book.category}}</td>
                 {% if book.isbn in issued_books %}
                     <td><span class="text-danger">Issued</span></td>
+                {% else %}
+                <td><span class="text-success">Available</span></td>
                 {% endif %}
-                {% if book.isbn not in issued_books %}
-                    <td><span class="text-success">Available</span></td>
-                {% endif %}
-
                 <td><a href="/reserve_book/{{ book.id }}/" class="btn btn-success">Reserve</a></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+
+<script>
+    {% if alert %}
+    alert("reservation Successfully.")
+    document.location = "/books_list"
+    {% endif %}
+</script>
 {% endblock %}
