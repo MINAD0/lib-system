@@ -26,11 +26,11 @@
                 <td>{{book.author}}</td>
                 <td>{{book.isbn}}</td>
                 <td>{{book.category}}</td>
-                {% if book.isbn in issued_books %}
-                    <td><span class="text-danger">Issued</span></td>
-                {% else %}
-                <td><span class="text-success">Available</span></td>
-                {% endif %}
+                    {% if book.name in issued_books %}
+                        <td><span class="text-danger">Issued</span></td>
+                    {% else %}
+                        <td><span class="text-success">Available</span></td>
+                    {% endif %}   
                 <td><a href="/reserve_book/{{ book.id }}/" class="btn btn-success">Reserve</a></td>
             </tr>
             {% endfor %}

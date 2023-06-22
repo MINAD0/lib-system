@@ -24,6 +24,7 @@ urlpatterns = [
 
     path("delete_book/<int:myid>/", views.delete_book, name="delete_book"),
     path("delete_student/<int:myid>/", views.delete_student, name="delete_student"),
+    path("delete_issue/<str:isbn>/", views.delete_issue, name="delete_issue"),
     path("reserve_book/<int:book_id>/", views.reserve_book, name="reserve_book"),
     # path('accept_reservation/<int:book_id>/', views.accept_reservation, name='accept_reservation'),
     path('delete_reservation/<int:myid>/', views.delete_reservation, name='delete_reservation'),

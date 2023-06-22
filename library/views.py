@@ -7,6 +7,7 @@ from . import forms, models
 from datetime import date
 from django.contrib.auth.decorators import login_required
 
+
 def index(request):
     return render(request, "index.html")
 
@@ -57,19 +58,22 @@ def issue_book(request):
 
 @login_required(login_url = '/admin_login')
 def view_issued_book(request):
-    issuedBooks = IssuedBook.objects.all()
+    issued_books = IssuedBook.objects.all()
     details = []
-    for issuedBook in issuedBooks:
-        days = (date.today() - issuedBook.issued_date).days
-        fine = 0
-        if days > 14:
-            fine = (days - 14) * 5
-        books = list(models.Book.objects.filter(isbn=issuedBook.isbn))
-        students = list(models.Student.objects.filter(user=issuedBook.student_id))
-        for book, student in zip(books, students):
-            t = (student.user, student.user_id, book.name, book.isbn, issuedBook.issued_date, issuedBook.expiry_date, fine)
-            details.append(t)
-    return render(request, "view_issued_book.html", {'issuedBooks': issuedBooks, 'details': details})
+
+    for issued_book in issued_books:
+        book = Book.objects.filter(isbn=issued_book.isbn).first()
+        student = Student.objects.filter(user=issued_book.student_id).first()
+
+        if student is None:
+            # Handle the case when student is not found
+            t = (issued_book.student_id, '', book.name, book.isbn, issued_book.issued_date, issued_book.expiry_date)
+        else:
+            t = (student.user, student.user_id, book.name, book.isbn, issued_book.issued_date, issued_book.expiry_date)
+        
+        details.append(t)
+
+    return render(request, "view_issued_book.html", {'issued_books': issued_books, 'details': details})
 
 @login_required(login_url = '/student_login')
 def student_issued_books(request):
@@ -211,10 +215,11 @@ def Logout(request):
     logout(request)
     return redirect ("/")
 
-def delete_issue(request, book_id):
-    issuedBooks = IssuedBook.objects.filter(id=book_id)
-    issuedBooks.delete()
-    return redirect("/view_issued_book")
+@login_required(login_url = '/admin_login')
+def delete_issue(request, isbn):
+    issued_book = IssuedBook.objects.filter(isbn=isbn)
+    issued_book.delete()
+    return redirect("view_issued_book")
 
 @login_required(login_url = '/student_login')
 def reserve_book(request, book_id):
